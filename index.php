@@ -86,26 +86,28 @@ try {
     die($e->getMessage());
 }
 
-$start  = new DateTime('next monday +1 week');
-$end    = new DateTime('next sunday +1 week');
+$start  = new DateTime('first day of this month');
+$end    = new DateTime('last day of this month');
 
 $me = new MyGes\Me($mygesClient);
 $agenda = $me->getAgenda($start->getTimestamp() * 1000, $end->getTimestamp() * 1000);
 
 if ($agenda) {
     $events = $service->events->listEvents(CALENDAR_ID, [
-        'timeMin' => $start->format(DateTime::RFC3339), 
-        'timeMax' => $end->format(DateTime::RFC3339)
+        'orderBy'       => 'startTime',
+        'singleEvents'  => TRUE,
+        'timeMin'       => $start->format('c'), 
+        'timeMax'       => $end->format('c')
     ]);
 
     // delete
-    foreach ($events as $e) {
-        if (strpos($e->summary, 'ESGI >') !== false) {
-            $service->events->delete(CALENDAR_ID, $e->id);
-            echo '[-] ' . $e->summary;
+    foreach ($events as $event) {
+        if (strpos($event->summary, 'ESGI >') !== false) {
+            $service->events->delete(CALENDAR_ID, $event->id);
+            echo '[-] ' . $event->summary . PHP_EOL;
         }
     }
-    
+
     // import
     foreach ($agenda as $session) {
         $rooms  = getRoomsFromSession($session);
@@ -126,6 +128,6 @@ if ($agenda) {
         $event->setEnd($e);
 
         $service->events->insert(CALENDAR_ID, $event);
-        echo '[+] ' . $e->summary;
+        echo '[+] ' . $event->summary . PHP_EOL;
     }
 }
