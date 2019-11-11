@@ -1,0 +1,4 @@
+vendor
+.env
+token.json
+credentials.json

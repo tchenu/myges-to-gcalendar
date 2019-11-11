@@ -1,0 +1,8 @@
+{
+    "require": {
+        "google/apiclient": "^2.0",
+        "tchenu/myges": "^1.0",
+        "nesbot/carbon": "^2.26",
+        "vlucas/phpdotenv": "^3.6"
+    }
+}

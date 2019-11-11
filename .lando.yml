@@ -1,0 +1,4 @@
+name: mges-to-calendar
+recipe: lemp
+config:
+  webroot: .
