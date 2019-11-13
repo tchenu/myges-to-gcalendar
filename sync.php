@@ -22,11 +22,11 @@ function getClient()
     $client->setScopes([
         Google_Service_Calendar::CALENDAR
     ]);
-    $client->setAuthConfig('credentials.json');
+    $client->setAuthConfig(__DIR__ . '/credentials.json');
     $client->setAccessType('offline');
     $client->setPrompt('select_account consent');
 
-    $tokenPath = 'token.json';
+    $tokenPath = (__DIR__ . '/token.json';
     if (file_exists($tokenPath)) {
         $accessToken = json_decode(file_get_contents($tokenPath), true);
         $client->setAccessToken($accessToken);
