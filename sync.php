@@ -143,7 +143,7 @@ function process() : void
             $e->setDateTime(getDateTimeForEvent($session->end_date));
             $event->setEnd($e);
 
-            // $service->events->insert(getenv('CALENDAR_ID'), $event);
+            $service->events->insert(getenv('CALENDAR_ID'), $event);
             echo '[+] ' . $event->summary . PHP_EOL;
         }
     }
