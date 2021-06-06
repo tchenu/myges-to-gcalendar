@@ -119,17 +119,25 @@ function process() : void
         // delete
         foreach ($events as $event) {
             if (strpos($event->summary, 'ESGI >') !== false) {
-                // $service->events->delete(getenv('CALENDAR_ID'), $event->id);
+                $service->events->delete(getenv('CALENDAR_ID'), $event->id);
                 echo '[-] ' . $event->summary . PHP_EOL;
             }
         }
 
         // import
         foreach ($agenda as $session) {
+            if (!$session->start_date || !$session->end_date) {
+                continue;
+            }
+
             $rooms  = getRoomsFromSession($session);
 
             $event = new Google_Service_Calendar_Event();
-            $event->setSummary('ESGI > #' . $session->reservation_id . ' > ' . $session->name);
+            $event->setSummary('ESGI > ' . $session->name);
+
+            if ($session->modality) {
+                $event->setSummary($event->getSummary() . ' (' . $session->modality . ')');
+            }
 
             if ($session->teacher && $rooms) {
                 $event->setDescription('Avec ' . $session->teacher . ' en ' . implode('\n', $rooms));
